@@ -53,15 +53,15 @@ function AttedenceTable(props) {
     })
 
   return (
-    <div style={{ margin: '20px', width: 'auto' }}>
+    <div style={{ margin: "20px", width: "auto" }}>
       <Paper>
         <MaterialTable
-          title={title}
+          title={`${title}_${new Date()}`}
           data={data}
           columns={columns}
           options={{
             pageSize: 20,
-            paginationType: 'stepped',
+            paginationType: "stepped",
             exportButton: true,
           }}
         />
