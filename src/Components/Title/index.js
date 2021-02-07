@@ -6,9 +6,11 @@ import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from "react-router-dom"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Avatar from '@material-ui/core/Avatar'
+import { onClickTakeAttendance } from "../middleware"
+import { connect } from "react-redux"
 
 function Copyright() {
   return (
@@ -40,14 +42,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function SignIn() {
+function SignIn(props) {
+  const { _on_click } = props
   const classes = useStyles()
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState("")
   const handleChange = (event) => {
     setTitle(event.target.value)
   }
+
+  const history = useHistory()
+
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -55,25 +61,24 @@ export default function SignIn() {
         </Avatar>
         <form className={classes.form} noValidate>
           <TextField
-            variant='outlined'
-            margin='normal'
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            label='Name of Subject'
+            label="Name of Subject"
             value={title}
             onChange={(event) => handleChange(event)}
           />
-          <Link to={'/table/' + title} style={{ textDecoration: 'none' }}>
-            <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              color='primary'
-              className={classes.submit}
-            >
-              Take attendance
-            </Button>
-          </Link>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={() => _on_click(history, title)}
+            className={classes.submit}
+          >
+            Take attendance
+          </Button>
         </form>
       </div>
       <Box mt={8}>
@@ -82,3 +87,13 @@ export default function SignIn() {
     </Container>
   )
 }
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    _on_click: (history, title) => {
+      dispatch(onClickTakeAttendance(history, title))
+    },
+  }
+}
+
+export default connect(null, mapDispatchToProps)(SignIn)
